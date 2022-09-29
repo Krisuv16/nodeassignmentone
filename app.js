@@ -98,9 +98,9 @@ app.use(seneca.export('web'));
 
 
 app.listen(3009)
-console.log("Server listening on localhost:3009 ...");
+console.log("Server listening on 127.0.0.1:3009 ...");
 console.log("----- Requests -------------------------");
-console.log("http://localhost:3009/api/add-user?username=Krisuv&email=krisuv16@gmail.con&age=21");
-console.log("http://localhost:3009/api/get-all-users");
-console.log("http://localhost:3009/api/get-user?user_id=id");
-console.log("http://localhost:3009/api/delete-user");
+console.log("http://127.0.0.1:3009/api/add-user?username=Krisuv&email=krisuv16@gmail.con&age=21");
+console.log("http://127.0.0.1:3009/api/get-all-users");
+console.log("http://127.0.0.1:3009/api/get-user?user_id=id");
+console.log("http://127.0.0.1:3009/api/delete-user");
