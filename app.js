@@ -2,20 +2,20 @@
 var plugin = function (options) {
     var seneca = this;
 
-    seneca.add({ role: 'user', cmd: 'post' }, function (msg, respond) {
-        this.make('user').data$(msg.data).save$(respond);
+    seneca.add({ role: 'products', cmd: 'post' }, function (msg, respond) {
+        this.make('products').data$(msg.data).save$(respond);
     });
 
-    seneca.add({ role: 'user', cmd: 'get' }, function (msg, respond) {
-        this.make('user').load$(msg.data.user_id, respond);
+    seneca.add({ role: 'products', cmd: 'get' }, function (msg, respond) {
+        this.make('products').load$(msg.data.products_id, respond);
     });
 
-    seneca.add({ role: 'user', cmd: 'get-all' }, function (msg, respond) {
-        this.make('user').list$({}, respond);
+    seneca.add({ role: 'products', cmd: 'get-all' }, function (msg, respond) {
+        this.make('products').list$({}, respond);
     });
 
-    seneca.add({ role: 'user', cmd: 'delete' }, function (msg, respond) {
-        this.make('user').remove$(msg.data, respond);
+    seneca.add({ role: 'products', cmd: 'delete' }, function (msg, respond) {
+        this.make('products').remove$(msg.data, respond);
     });
 
 
@@ -29,38 +29,38 @@ var seneca = require("seneca")();
 seneca.use(plugin);
 seneca.use('seneca-entity');
 
-seneca.add('role:api, cmd:add-user', function (args, done) {
-    var user = {
-        Username: args.username,
-        Email: args.email,
-        Age: args.age
+seneca.add('role:api, cmd:add-products', function (args, done) {
+    var products = {
+        Product: args.productsname,
+        Type: args.type,
+        Quantity: args.quantity
     }
-    seneca.act({ role: 'user', cmd: 'post', data: user }, function (err, msg) {
+    seneca.act({ role: 'products', cmd: 'post', data: products, }, function (err, msg) {
         done(err, msg);
     });
 });
 
-seneca.add('role:api, cmd:get-all-users', function (args, done) {
-    seneca.act({ role: 'user', cmd: 'get-all' }, function (err, msg) {
+seneca.add('role:api, cmd:get-all-productss', function (args, done) {
+    seneca.act({ role: 'products', cmd: 'get-all' }, function (err, msg) {
         done(err, msg);
     });
 });
 
-seneca.add('role:api, cmd:get-user', function (args, done) {
-    seneca.act({ role: 'user', cmd: 'get', data: { user_id: args.user_id } }, function (err, msg) {
+seneca.add('role:api, cmd:get-products', function (args, done) {
+    seneca.act({ role: 'products', cmd: 'get', data: { products_id: args.products_id } }, function (err, msg) {
         done(err, msg);
     });
 });
 
 
-seneca.add('role:api, cmd:delete-user', function (args, done) {
-    seneca.act({ role: 'user', cmd: 'delete' }, function (err, msg) {
+seneca.add('role:api, cmd:delete-products', function (args, done) {
+    seneca.act({ role: 'products', cmd: 'delete' }, function (err, msg) {
         done(err, msg);
     });
 });
 
-seneca.add('role:api, cmd:delete-all-users', function (args, done) {
-    done(null, { cmd: "delete-all-users" });
+seneca.add('role:api, cmd:delete-all-productss', function (args, done) {
+    done(null, { cmd: "delete-all-productss" });
 });
 
 seneca.act('role:web', {
@@ -68,10 +68,10 @@ seneca.act('role:web', {
         prefix: '/api',
         pin: { role: 'api', cmd: '*' },
         map: {
-            'add-user': {POST: true ,GET: true },
-            'get-all-users': { GET: true },
-            'get-user': { GET: true, },
-            'delete-user': { GET: true, }
+            'add-products': {POST: true ,GET: true },
+            'get-all-productss': { GET: true },
+            'get-products': { GET: true, },
+            'delete-products': { GET: true, }
         }
     }
 })
@@ -84,7 +84,7 @@ function countMiddleware(req, res, next) {
     console.log(req.method);
     console.log("sadddddddd");
     if(req.method === "GET") countGET++;
-    if(req.method === "POST") countPOST++;
+    if(req.method === "ADD") countPOST++;
     console.log("Request Count ==> Get:" + countGET + ", Post:" + countPOST + " <== Request Count")
     if(next)next();
 }
@@ -100,7 +100,7 @@ app.use(seneca.export('web'));
 app.listen(3009)
 console.log("Server listening on 127.0.0.1:3009 ...");
 console.log("----- Requests -------------------------");
-console.log("http://127.0.0.1:3009/api/add-user?username=Krisuv&email=krisuv16@gmail.con&age=21");
-console.log("http://127.0.0.1:3009/api/get-all-users");
-console.log("http://127.0.0.1:3009/api/get-user?user_id=id");
-console.log("http://127.0.0.1:3009/api/delete-user");
+console.log("http://127.0.0.1:3009/api/add-products?productsname=Krisuv&type=Nice&quantity=21");
+console.log("http://127.0.0.1:3009/api/get-all-productss");
+console.log("http://127.0.0.1:3009/api/get-products?products_id=id");
+console.log("http://127.0.0.1:3009/api/delete-products");
