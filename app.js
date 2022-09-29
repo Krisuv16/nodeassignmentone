@@ -75,3 +75,32 @@ seneca.act('role:web', {
         }
     }
 })
+
+let countGET = 0;
+let countPOST = 0;
+
+function countMiddleware(req, res, next) {
+    console.log("sadddddddd");
+    console.log(req.method);
+    console.log("sadddddddd");
+    if(req.method === "GET") countGET++;
+    if(req.method === "POST") countPOST++;
+    console.log("Request Count ==> Get:" + countGET + ", Post:" + countPOST + " <== Request Count")
+    if(next)next();
+}
+
+var express = require('express');
+var app = express();
+app.use(require("body-parser").json())
+app.use(countMiddleware)
+app.use(seneca.export('web'));
+
+
+
+app.listen(3009)
+console.log("Server listening on localhost:3009 ...");
+console.log("----- Requests -------------------------");
+console.log("http://localhost:3009/api/add-user?username=Krisuv&email=krisuv16@gmail.con&age=21");
+console.log("http://localhost:3009/api/get-all-users");
+console.log("http://localhost:3009/api/get-user?user_id=id");
+console.log("http://localhost:3009/api/delete-user");
